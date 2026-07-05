@@ -50,6 +50,7 @@ app.get("/", (req, res) => {
       documentation: "/api/docs",
       health: "/api/health",
       databaseHealth: "/api/health/database",
+      mongoHealth: "/api/health/mongodb",
       register: "/api/auth/register",
       login: "/api/auth/login",
       logout: "/api/auth/logout",
@@ -60,11 +61,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/health", healthRoutes);
-
 app.use("/api/auth", authRoutes);
-
 app.use("/api/me", meRoutes);
-
 app.use("/api/products", productRoutes);
 
 app.use(notFound);
