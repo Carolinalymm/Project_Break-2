@@ -6,6 +6,7 @@ import healthRoutes from "./routes/health.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import meRoutes from "./routes/me.routes.js";
 import productRoutes from "./routes/product.routes.js";
+import reviewRoutes from "./routes/review.routes.js";
 import notFound from "./middlewares/notFound.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import {
@@ -56,6 +57,9 @@ app.get("/", (req, res) => {
       logout: "/api/auth/logout",
       currentUser: "/api/me",
       products: "/api/products",
+      productReviews:
+        "/api/products/:id/reviews",
+      reviews: "/api/reviews/:reviewId",
     },
   });
 });
@@ -64,6 +68,7 @@ app.use("/api/health", healthRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/me", meRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

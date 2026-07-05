@@ -7,6 +7,10 @@ import {
   updateProduct,
   deleteProduct,
 } from "../controllers/product.controller.js";
+import {
+  getProductReviews,
+  createProductReview,
+} from "../controllers/review.controller.js";
 import requireAuth from "../middlewares/auth.middleware.js";
 import requireRole from "../middlewares/requireRole.js";
 import asyncHandler from "../utils/asyncHandler.js";
@@ -16,6 +20,17 @@ const router = Router();
 router.get(
   "/",
   asyncHandler(getProducts),
+);
+
+router.get(
+  "/:id/reviews",
+  asyncHandler(getProductReviews),
+);
+
+router.post(
+  "/:id/reviews",
+  asyncHandler(requireAuth),
+  asyncHandler(createProductReview),
 );
 
 router.get(
@@ -29,7 +44,6 @@ router.post(
   requireRole("ADMIN"),
   asyncHandler(createProduct),
 );
-
 router.put(
   "/:id",
   asyncHandler(requireAuth),
