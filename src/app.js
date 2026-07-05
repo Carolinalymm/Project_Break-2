@@ -3,15 +3,22 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 
 import healthRoutes from "./routes/health.routes.js";
+import authRoutes from "./routes/auth.routes.js";
+import meRoutes from "./routes/me.routes.js";
 import notFound from "./middlewares/notFound.js";
 import errorHandler from "./middlewares/errorHandler.js";
-import { sendSuccess } from "./utils/apiResponse.js";
+import {
+  sendSuccess,
+} from "./utils/apiResponse.js";
 
 const app = express();
-
+app.set("trust proxy", 1);
+app.disable("x-powered-by");
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin:
+      process.env.FRONTEND_URL ||
+      "http://localhost:5173",
     credentials: true,
   }),
 );
@@ -26,9 +33,12 @@ app.use(
 
 app.use(cookieParser());
 
-app.get(["/favicon.ico", "/favicon.svg"], (req, res) => {
-  return res.status(204).end();
-});
+app.get(
+  ["/favicon.ico", "/favicon.svg"],
+  (req, res) => {
+    return res.status(204).end();
+  },
+);
 
 app.get("/", (req, res) => {
   return sendSuccess(res, {
@@ -37,11 +47,19 @@ app.get("/", (req, res) => {
       documentation: "/api/docs",
       health: "/api/health",
       databaseHealth: "/api/health/database",
+      register: "/api/auth/register",
+      login: "/api/auth/login",
+      logout: "/api/auth/logout",
+      currentUser: "/api/me",
     },
   });
 });
 
 app.use("/api/health", healthRoutes);
+
+app.use("/api/auth", authRoutes);
+
+app.use("/api/me", meRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
