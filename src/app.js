@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import healthRoutes from "./routes/health.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import meRoutes from "./routes/me.routes.js";
+import productRoutes from "./routes/product.routes.js";
 import notFound from "./middlewares/notFound.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import {
@@ -12,7 +13,9 @@ import {
 } from "./utils/apiResponse.js";
 
 const app = express();
+
 app.set("trust proxy", 1);
+
 app.disable("x-powered-by");
 app.use(
   cors({
@@ -51,6 +54,7 @@ app.get("/", (req, res) => {
       login: "/api/auth/login",
       logout: "/api/auth/logout",
       currentUser: "/api/me",
+      products: "/api/products",
     },
   });
 });
@@ -60,6 +64,8 @@ app.use("/api/health", healthRoutes);
 app.use("/api/auth", authRoutes);
 
 app.use("/api/me", meRoutes);
+
+app.use("/api/products", productRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
