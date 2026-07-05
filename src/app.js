@@ -26,12 +26,17 @@ app.use(
 
 app.use(cookieParser());
 
+app.get(["/favicon.ico", "/favicon.svg"], (req, res) => {
+  return res.status(204).end();
+});
+
 app.get("/", (req, res) => {
   return sendSuccess(res, {
     message: "Bienvenida a Backend React Ready",
     data: {
       documentation: "/api/docs",
       health: "/api/health",
+      databaseHealth: "/api/health/database",
     },
   });
 });

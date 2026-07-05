@@ -1,4 +1,6 @@
+import supabase from "../config/database.js";
 import { sendSuccess } from "../utils/apiResponse.js";
+import AppError from "../utils/appError.js";
 
 export const getHealth = (req, res) => {
   return sendSuccess(res, {
@@ -6,6 +8,33 @@ export const getHealth = (req, res) => {
     message: "API funcionando correctamente",
     data: {
       environment: process.env.NODE_ENV || "development",
+      timestamp: new Date().toISOString(),
+    },
+  });
+};
+
+export const getDatabaseHealth = async (req, res) => {
+
+  const { count, error } = await supabase
+    .from("products")
+    .select("id", {
+      count: "exact",
+      head: true,
+    });
+
+  if (error) {
+    throw new AppError(
+      `No se pudo conectar con Supabase: ${error.message}`,
+      503,
+    );
+  }
+
+  return sendSuccess(res, {
+    statusCode: 200,
+    message: "Conexión con Supabase correcta",
+    data: {
+      database: "connected",
+      productsCount: count ?? 0,
       timestamp: new Date().toISOString(),
     },
   });
