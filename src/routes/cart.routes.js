@@ -6,6 +6,9 @@ import {
   updateCartItem,
   deleteCartItem,
 } from "../controllers/cart.controller.js";
+import {
+  checkoutCart,
+} from "../controllers/order.controller.js";
 import requireAuth from "../middlewares/auth.middleware.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
@@ -18,6 +21,11 @@ router.use(
 router.get(
   "/",
   asyncHandler(getCart),
+);
+
+router.post(
+  "/checkout",
+  asyncHandler(checkoutCart),
 );
 
 router.post(
