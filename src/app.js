@@ -8,6 +8,7 @@ import meRoutes from "./routes/me.routes.js";
 import productRoutes from "./routes/product.routes.js";
 import reviewRoutes from "./routes/review.routes.js";
 import wishlistRoutes from "./routes/wishlist.routes.js";
+import cartRoutes from "./routes/cart.routes.js";
 import notFound from "./middlewares/notFound.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import {
@@ -71,6 +72,10 @@ app.get("/", (req, res) => {
         "/api/reviews/:reviewId",
       wishlist:
         "/api/wishlist",
+      cart:
+        "/api/cart",
+      cartItems:
+        "/api/cart/items",
     },
   });
 });
@@ -103,6 +108,11 @@ app.use(
 app.use(
   "/api/wishlist",
   wishlistRoutes,
+);
+
+app.use(
+  "/api/cart",
+  cartRoutes,
 );
 
 app.use(notFound);
