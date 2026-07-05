@@ -2,6 +2,11 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
+import healthRoutes from "./routes/health.routes.js";
+import notFound from "./middlewares/notFound.js";
+import errorHandler from "./middlewares/errorHandler.js";
+import { sendSuccess } from "./utils/apiResponse.js";
+
 const app = express();
 
 app.use(
@@ -12,24 +17,28 @@ app.use(
 );
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+app.use(
+  express.urlencoded({
+    extended: true,
+  }),
+);
+
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
-  res.status(200).json({
-    success: true,
+  return sendSuccess(res, {
     message: "Bienvenida a Backend React Ready",
-  });
-});
-
-app.get("/api/health", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "API funcionando correctamente",
     data: {
-      environment: process.env.NODE_ENV || "development",
+      documentation: "/api/docs",
+      health: "/api/health",
     },
   });
 });
+
+app.use("/api/health", healthRoutes);
+
+app.use(notFound);
+app.use(errorHandler);
 
 export default app;
