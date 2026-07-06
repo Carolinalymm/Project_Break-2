@@ -1,7 +1,9 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import swaggerUi from "swagger-ui-express";
 
+import swaggerSpecification from "./config/swagger.js";
 import healthRoutes from "./routes/health.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import meRoutes from "./routes/me.routes.js";
@@ -42,7 +44,10 @@ app.use(
 app.use(cookieParser());
 
 app.get(
-  ["/favicon.ico", "/favicon.svg"],
+  [
+    "/favicon.ico",
+    "/favicon.svg",
+  ],
   (req, res) => {
     return res.status(204).end();
   },
@@ -55,6 +60,8 @@ app.get("/", (req, res) => {
     data: {
       documentation:
         "/api/docs",
+      openApiJson:
+        "/api/docs.json",
       health:
         "/api/health",
       databaseHealth:
@@ -93,6 +100,33 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get(
+  "/api/docs.json",
+  (req, res) => {
+    return res.status(200).json(
+      swaggerSpecification,
+    );
+  },
+);
+app.use(
+  "/api/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(
+    swaggerSpecification,
+    {
+      customSiteTitle:
+        "Backend React Ready API",
+
+      swaggerOptions: {
+        withCredentials: true,
+        persistAuthorization: true,
+        displayRequestDuration: true,
+        filter: true,
+        docExpansion: "none",
+      },
+    },
+  ),
+);
 app.use(
   "/api/health",
   healthRoutes,
