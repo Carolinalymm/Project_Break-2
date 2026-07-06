@@ -10,6 +10,7 @@ import reviewRoutes from "./routes/review.routes.js";
 import wishlistRoutes from "./routes/wishlist.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
 import orderRoutes from "./routes/order.routes.js";
+import uploadRoutes from "./routes/upload.routes.js";
 import notFound from "./middlewares/notFound.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import {
@@ -86,6 +87,8 @@ app.get("/", (req, res) => {
         "/api/orders",
       orderDetail:
         "/api/orders/:orderId",
+      productImageUpload:
+        "/api/uploads/products",
     },
   });
 });
@@ -130,6 +133,10 @@ app.use(
   orderRoutes,
 );
 
+app.use(
+  "/api/uploads/products",
+  uploadRoutes,
+);
 app.use(notFound);
 app.use(errorHandler);
 
