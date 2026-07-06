@@ -2,10 +2,6 @@ import request from "supertest";
 
 import app from "../src/app.js";
 
-/*
- * Estas pruebas comprueban la configuración general
- * de Express sin conectarse a servicios externos.
- */
 describe("Backend React Ready API", () => {
   describe("GET /api/health", () => {
     test("debe indicar que la API funciona", async () => {
